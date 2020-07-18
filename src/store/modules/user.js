@@ -3,28 +3,34 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
-  token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  roles: []
+  access_token: getToken(),
+  refresh_token: '',
+  token_type: 'bearer',
+  user: {
+    account: '',
+    avatar: '',
+    id: '',
+    expires_in: '',
+    phone: '',
+    scope: '',
+    username: ''
+  },
+  roles: [],
+  rolesIds: []
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+  SET_USER: (state, user) => {
+    state.user = user
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ROLE_IDS: (state, roleIds) => {
+    state.rolesIds = roleIds
   }
 }
 
@@ -33,9 +39,17 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
+      const formData = new FormData()
+      formData.append('username', username.trim())
+      formData.append('password', password)
+      formData.append('grant_type', 'password')
+      login(formData).then(response => {
+        const data = response
+        console.log(response)
+        commit('SET_TOKEN', data.access_token)
+        commit('SET_USER', data)
+        commit('SET_ROLES', data.roles)
+        commit('SET_ROLE_IDS', data.rolesIds)
         setToken(data.token)
         resolve()
       }).catch(error => {

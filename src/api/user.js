@@ -2,7 +2,11 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/vue-element-admin/user/login',
+    headers: {
+      'Authorization': 'Basic YXBwOmFwcA==',
+      'tenant_code': 0
+    },
+    url: '/whale-auth/oauth/token',
     method: 'post',
     data
   })
