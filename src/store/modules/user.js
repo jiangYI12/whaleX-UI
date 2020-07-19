@@ -6,7 +6,7 @@ const state = {
   access_token: getToken(),
   refresh_token: '',
   token_type: 'bearer',
-  user: {
+  customerInfo: {
     account: '',
     avatar: '',
     id: '',
@@ -21,10 +21,10 @@ const state = {
 
 const mutations = {
   SET_TOKEN: (state, token) => {
-    state.token = token
+    state.access_token = token
   },
   SET_USER: (state, user) => {
-    state.user = user
+    state.customerInfo = user
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
@@ -45,12 +45,12 @@ const actions = {
       formData.append('grant_type', 'password')
       login(formData).then(response => {
         const data = response
-        console.log(response)
+        console.log(data)
         commit('SET_TOKEN', data.access_token)
         commit('SET_USER', data)
-        commit('SET_ROLES', data.roles)
-        commit('SET_ROLE_IDS', data.rolesIds)
-        setToken(data.token)
+        commit('SET_ROLES', [...data.roles])
+        commit('SET_ROLE_IDS', [...data.rolesIds])
+        setToken(data.token_type + ' ' + data.access_token)
         resolve()
       }).catch(error => {
         reject(error)

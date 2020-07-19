@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { getToken } from '@/utils/auth'
 
 export function login(data) {
   return request({
@@ -12,11 +13,14 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getMenus(roleIds) {
   return request({
-    url: '/vue-element-admin/user/info',
-    method: 'get',
-    params: { token }
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/menus/getSysMenuByRoleIds',
+    method: 'post',
+    data: roleIds
   })
 }
 

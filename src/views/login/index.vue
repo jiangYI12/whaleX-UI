@@ -6,7 +6,7 @@
         <h3 class="title">
           <span class="titleOne">whale</span><span class="titleTwo">X</span> <span class="titleThree">后台系统</span><br>
         </h3>
-        <lang-select class="set-language"/>
+        <lang-select class="set-language" />
       </div>
 
       <el-form-item prop="username">
@@ -88,8 +88,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'sdad23307216',
+        password: 'sdad23307216'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
