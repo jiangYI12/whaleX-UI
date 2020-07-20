@@ -84,14 +84,14 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/documentation',
+    path: '/userManager',
     component: Layout,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation', affix: true }
+        component: () => import('@/views/userManager/index'),
+        name: 'userManager',
+        meta: { title: '用户管理', icon: 'documentation', affix: true }
       }
     ]
   },

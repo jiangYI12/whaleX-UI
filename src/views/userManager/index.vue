@@ -12,7 +12,7 @@
 import DropdownMenu from '@/components/Share/DropdownMenu'
 
 export default {
-  name: 'Documentation',
+  name: 'UserManager',
   components: { DropdownMenu },
   data() {
     return {
