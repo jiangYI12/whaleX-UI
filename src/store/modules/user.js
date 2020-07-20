@@ -47,8 +47,8 @@ const actions = {
         const data = response
         commit('SET_TOKEN', data.access_token)
         commit('SET_USER', data)
-        commit('SET_ROLES', [...data.roles])
-        commit('SET_ROLE_IDS', [...data.rolesIds])
+        commit('SET_ROLES', data.roles)
+        commit('SET_ROLE_IDS', data.rolesIds)
         setToken(data.token_type + ' ' + data.access_token)
         resolve()
       }).catch(error => {
@@ -60,11 +60,10 @@ const actions = {
   reloadUserInfo({ commit }) {
     return new Promise((resolve, reject) => {
       getUserById().then(response => {
-        const data = response
+        const data = response.data
         commit('SET_USER', data)
         commit('SET_ROLES', [...data.roles])
-        commit('SET_ROLE_IDS', [...data.rolesIds])
-        setToken(data.token_type + ' ' + data.access_token)
+        commit('SET_ROLE_IDS', [...data.roleIds])
         resolve()
       }).catch(error => {
         reject(error)
@@ -75,20 +74,11 @@ const actions = {
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
-        resetRouter()
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-        dispatch('tagsView/delAllViews', null, { root: true })
-
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+      removeToken()
+      resetRouter()
+      resolve()
     })
   },
 

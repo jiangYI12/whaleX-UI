@@ -80,12 +80,6 @@ export default {
       'device'
     ])
   },
-  created() {
-    const userId = this.$store.getters.customerInfo
-    if (userId) {
-      this.$store.dispatch('user/reloadUserInfo')
-    }
-  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
