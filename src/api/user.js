@@ -24,9 +24,13 @@ export function getMenus(roleIds) {
   })
 }
 
-export function logout() {
+export function getUserById() {
   return request({
-    url: '/vue-element-admin/user/logout',
-    method: 'post'
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysCustomer/getUserById',
+    method: 'get'
   })
 }
+
