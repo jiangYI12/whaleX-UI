@@ -1,56 +1,148 @@
 <template>
-  <div class="app-container documentation-container">
-    <a class="document-btn" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/">Documentation</a>
-    <a class="document-btn" target="_blank" href="https://github.com/PanJiaChen/vue-element-admin/">Github Repository</a>
-    <a class="document-btn" target="_blank" href="https://panjiachen.gitee.io/vue-element-admin-site/zh/">国内文档</a>
-    <dropdown-menu class="document-btn" :items="articleList" title="系列文章" />
-    <a class="document-btn" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/zh/job/">内推招聘</a>
+  <div class="app-container">
+    <div style="padding: 5px">
+      <el-button type="primary" @click="addCustomerDialogVisible=true">添加新用户</el-button>
+    </div>
+    <div>
+      <el-table
+        :data="customers"
+        border
+        style="width: 100%"
+      >
+        <el-table-column
+          fixed
+          prop="account"
+          label="账户"
+          width="200"
+        />
+        <el-table-column
+          prop="avatar"
+          label="头像"
+          width="80"
+        >
+          <template slot-scope="scope">
+            <div>
+              <el-image
+                :src="scope.row.avatar"
+                :preview-src-list="[scope.row.avatar]"
+              />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="username"
+          label="用户名"
+          width="200"
+        />
+        <el-table-column
+          prop="phone"
+          label="手机"
+          width="200"
+        />
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          width="200"
+        />
+        <el-table-column
+          prop="role"
+          label="角色"
+        />
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleClick(scope.row)">修改</el-button>
+            <el-button type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block" style="text-align: center;padding:8px;">
+        <el-pagination
+          :current-page="page.pageNo"
+          :page-sizes="[20, 40, 80, 100]"
+          :page-size="page.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="page.total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </div>
+    <el-dialog
+      title="添加新用户"
+      :visible.sync="addCustomerDialogVisible"
+      width="30%"
+      center
+    >
+      <el-form label-position="left" label-width="80px" :model="formLabelAlign">
+        <el-form-item label="账户" required>
+          <el-input v-model="customer.account" />
+        </el-form-item>
+        <el-form-item label="密码" required>
+          <el-input v-model="customer.password" />
+        </el-form-item>
+        <el-form-item label="用户名" required>
+          <el-input v-model="customer.username" />
+        </el-form-item>
+        <el-form-item label="手机号" required>
+          <el-input v-model="customer.phone" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addCustomerDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCustomer">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import DropdownMenu from '@/components/Share/DropdownMenu'
-
+import { getUserPage, addCustomer } from '@/api/user'
 export default {
   name: 'UserManager',
-  components: { DropdownMenu },
   data() {
     return {
-      articleList: [
-        { title: '基础篇', href: 'https://juejin.im/post/59097cd7a22b9d0065fb61d2' },
-        { title: '登录权限篇', href: 'https://juejin.im/post/591aa14f570c35006961acac' },
-        { title: '实战篇', href: 'https://juejin.im/post/593121aa0ce4630057f70d35' },
-        { title: 'vue-admin-template 篇', href: 'https://juejin.im/post/595b4d776fb9a06bbe7dba56' },
-        { title: 'v4.0 篇', href: 'https://juejin.im/post/5c92ff94f265da6128275a85' },
-        { title: '自行封装 component', href: 'https://segmentfault.com/a/1190000009090836' },
-        { title: '优雅的使用 icon', href: 'https://juejin.im/post/59bb864b5188257e7a427c09' },
-        { title: 'webpack4（上）', href: 'https://juejin.im/post/59bb864b5188257e7a427c09' },
-        { title: 'webpack4（下）', href: 'https://juejin.im/post/5b5d6d6f6fb9a04fea58aabc' }
-      ]
+      addCustomerDialogVisible: false,
+      page: {
+        pageSize: 20,
+        pageNo: 1,
+        total: 0
+      },
+      customer: {
+        account: '',
+        username: '',
+        password: '',
+        phone: '',
+        // 默认普通用户
+        roles: [{ id: 2 }]
+      },
+      customers: []
+    }
+  },
+  mounted() {
+    this.getUserPage()
+  },
+  methods: {
+    addCustomer() {
+      addCustomer(this.customer).then(response => {
+
+      })
+    },
+    getUserPage() {
+      getUserPage(this.page).then(respone => {
+        const data = respone.data
+        const { total, size, current } = data
+        this.page = { total: total, pageSize: size, pageNo: current }
+        this.customers = data.records
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.documentation-container {
-  margin: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
 
-  .document-btn {
-    flex-shrink: 0;
-    display: block;
-    cursor: pointer;
-    background: black;
-    color: white;
-    height: 60px;
-    width: 200px;
-    margin-bottom: 16px;
-    line-height: 60px;
-    font-size: 20px;
-    text-align: center;
-  }
-}
 </style>

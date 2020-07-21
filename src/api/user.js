@@ -34,3 +34,24 @@ export function getUserById() {
   })
 }
 
+export function getUserPage(data) {
+  return request({
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysCustomer/getUserPage',
+    method: 'post',
+    data
+  })
+}
+
+export function addCustomer(data) {
+  return request({
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysCustomer/saveOrUpdate',
+    method: 'post',
+    data
+  })
+}
