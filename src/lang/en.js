@@ -96,7 +96,7 @@ export default {
     cancel: 'Cancel'
   },
   guide: {
-    description: 'The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ',
+    description: 'The permissions page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ',
     button: 'Show Guide'
   },
   components: {

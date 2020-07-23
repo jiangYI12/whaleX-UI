@@ -58,13 +58,13 @@ const constantRoutes = [
     ]
   },
   {
-    path: '/guide',
+    path: '/permissions',
     component: 'layout/Layout',
-    redirect: '/guide/index',
+    redirect: '/permissions/index',
     children: [
       {
         path: 'index',
-        component: 'views/guide/index',
+        component: 'views/permissions/index',
         name: 'Guide',
         meta: { title: 'guide', icon: 'guide', noCache: true }
       }

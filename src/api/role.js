@@ -1,38 +1,46 @@
 import request from '@/utils/request'
+import { getToken } from '@/utils/auth'
 
-export function getRoutes() {
+export function getRoutesPage(data) {
   return request({
-    url: '/vue-element-admin/routes',
-    method: 'get'
-  })
-}
-
-export function getRoles() {
-  return request({
-    url: '/vue-element-admin/roles',
-    method: 'get'
-  })
-}
-
-export function addRole(data) {
-  return request({
-    url: '/vue-element-admin/role',
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysRole/getRolesPage',
     method: 'post',
     data
   })
 }
 
-export function updateRole(id, data) {
+export function getRolesList() {
   return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'put',
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysRole/getRolesList',
+    method: 'get'
+  })
+}
+
+export function saveOrUpdate(data) {
+  return request({
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysRole/saveOrUpdate',
+    method: 'post',
     data
   })
 }
 
-export function deleteRole(id) {
+export function deleteById(id) {
   return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'delete'
+    headers: {
+      'Authorization': getToken()
+    },
+    url: `/whale-user/sysRole/deleteById`,
+    method: 'get',
+    params: { id: id }
   })
 }
+
