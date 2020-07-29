@@ -44,3 +44,14 @@ export function deleteById(id) {
   })
 }
 
+export function addRoleMenu(data) {
+  return request({
+    headers: {
+      'Authorization': getToken()
+    },
+    url: `/whale-user/sysRoleMenu/addRoleMenu`,
+    method: 'post',
+    data
+  })
+}
+

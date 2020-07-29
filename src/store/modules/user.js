@@ -1,6 +1,7 @@
 import { login, logout, getUserById } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { windows } from 'codemirror/src/util/browser'
 
 const state = {
   access_token: getToken(),
@@ -63,7 +64,11 @@ const actions = {
         const data = response.data
         commit('SET_USER', data)
         commit('SET_ROLES', [...data.roles])
-        commit('SET_ROLE_IDS', [...data.roleIds])
+        const roleIds = []
+        data.roleIds.forEach(roleId => {
+          roleIds.push(roleId + '')
+        })
+        commit('SET_ROLE_IDS', roleIds)
         resolve()
       }).catch(error => {
         reject(error)
@@ -76,6 +81,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
+      commit('SET_USER', {})
       removeToken()
       resetRouter()
       resolve()

@@ -18,19 +18,37 @@ function hasPermission(roles, route) {
  * @param routes asyncRoutes
  * @param roles
  */
-export function filterAsyncRoutes(routes, roles) {
-  const res = []
-
+export function filterAsyncRoutes(routes, roles, menus, prePath) {
+  const res = {
+    isAdd: false,
+    router: []
+  }
   routes.forEach(route => {
     const tmp = { ...route }
+    // 判断是否有该菜单的角色
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+        // 查询是否有子路由对呀的菜单
+        const newRes = filterAsyncRoutes(tmp.children, roles, menus, prePath + tmp.path + '/')
+        tmp.children = newRes.router
+        res.isAdd = newRes.isAdd
       }
-      res.push(tmp)
+      // 循环查询是否包含对应的路由
+      for (let index = 0; index < menus.length; index++) {
+        const menu = menus[index]
+        if (menu.path === prePath + tmp.path) {
+          res.isAdd = true
+          res.router.push(tmp)
+        }
+        if (index === menus.length - 1 && !res.isAdd) {
+          res.isAdd = false
+        }
+      }
+      if (res.isAdd && tmp.children !== undefined) {
+        res.router.push(tmp)
+      }
     }
   })
-
   return res
 }
 
@@ -54,7 +72,8 @@ const actions = {
         if (roles.includes('admin')) {
           accessedRoutes = asyncRoutes || []
         } else {
-          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles, response.data, '').router
+          console.log(accessedRoutes)
         }
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)

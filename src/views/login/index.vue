@@ -99,7 +99,7 @@ export default {
       capsTooltip: false,
       loading: false,
       showDialog: false,
-      redirect: undefined,
+      redirect: '/dashboard',
       otherQuery: {}
     }
   },
@@ -149,7 +149,7 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({ path: '/dashboard', query: this.otherQuery })
               this.loading = false
             })
             .catch(() => {

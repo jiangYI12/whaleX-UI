@@ -29,10 +29,11 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="100"
+          width="150"
         >
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleClick(scope.row)">修改</el-button>
+            <el-button type="text" size="small" @click="showAddRoleMenuVisible(scope.row.id)">添加路由</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
@@ -51,6 +52,28 @@
     </div>
     <el-dialog
       title="添加新用户"
+      :visible.sync="addRoleMenuVisible"
+      width="30%"
+      center
+    >
+      <el-form label-position="right" label-width="100px">
+        <el-form-item>
+          <el-tree
+            :data="menus"
+            show-checkbox
+            node-key="id"
+            :props="defaultProps"
+            @check="checkMenu"
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addRoleMenuVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addRoleMenu">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="角色添加路由"
       :visible.sync="addRoleDialogVisible"
       width="30%"
       center
@@ -76,17 +99,28 @@
 
 <script>
 import * as roleApi from '@/api/role'
+import * as permissionApi from '@/api/permission'
 export default {
   name: 'Role',
   data() {
     return {
       addRoleDialogVisible: false,
+      addRoleMenuVisible: false,
       roles: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
       page: {
         pageSize: 20,
         pageNo: 1,
         total: 0
       },
+      roleMenu: {
+        roleId: '',
+        menuIds: []
+      },
+      menus: [],
       role: {
         id: '',
         roleName: '',
@@ -97,15 +131,34 @@ export default {
   },
   mounted() {
     this.getRoles()
+    this.getMenus()
   },
   methods: {
+    checkMenu(checkedNodes, checkedJson) {
+      this.roleMenu.menuIds = checkedJson.checkedKeys
+    },
+    getMenus() {
+      permissionApi.getSysMenusList().then(response => {
+        this.menus = response.data
+        console.log(this.menus)
+      })
+    },
     saveOrUpdate() {
       roleApi.saveOrUpdate(this.role).then(response => {
         console.log(response)
       })
     },
-    deleteRole() {
+    addRoleMenuVisible() {
       roleApi.deleteById(this.role.id).then(response => {
+
+      })
+    },
+    showAddRoleMenuVisible(roleId) {
+      this.addRoleMenuVisible = true
+      this.roleMenu.roleId = roleId
+    },
+    addRoleMenu() {
+      roleApi.addRoleMenu(this.roleMenu).then(response => {
 
       })
     },

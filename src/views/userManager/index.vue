@@ -45,7 +45,7 @@
           width="200"
         />
         <el-table-column
-          prop="role"
+          prop="roleNames"
           label="角色"
         />
         <el-table-column
@@ -55,7 +55,7 @@
         >
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="handleClick(scope.row)">修改</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="deleteCustomer(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,6 +90,23 @@
         <el-form-item label="手机号" required>
           <el-input v-model="customer.phone" />
         </el-form-item>
+        <el-form-item label="选择角色" required>
+          <el-select
+            v-model="addRoles"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择角色"
+          >
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addCustomerDialogVisible = false">取 消</el-button>
@@ -100,7 +117,8 @@
 </template>
 
 <script>
-import { getUserPage, addCustomer } from '@/api/user'
+import { getUserPage, addCustomer, deleteCustomer } from '@/api/user'
+import { getRolesList } from '@/api/role'
 export default {
   name: 'UserManager',
   data() {
@@ -117,18 +135,34 @@ export default {
         password: '',
         phone: '',
         // 默认普通用户
-        roles: [{ id: 2 }]
+        roles: []
       },
-      customers: []
+      customers: [],
+      roles: [],
+      addRoles: []
     }
   },
   mounted() {
     this.getUserPage()
+    this.getRolesList()
   },
   methods: {
     addCustomer() {
+      this.addRoles.forEach(roleId => {
+        this.customer.roles.push({ id: roleId })
+      })
       addCustomer(this.customer).then(response => {
 
+      })
+    },
+    getRolesList() {
+      getRolesList().then(response => {
+        this.roles = response.data
+      })
+    },
+    deleteCustomer(row) {
+      deleteCustomer(row.id).then(response => {
+        this.getUserPage()
       })
     },
     getUserPage() {
@@ -136,7 +170,13 @@ export default {
         const data = respone.data
         const { total, size, current } = data
         this.page = { total: total, pageSize: size, pageNo: current }
-        this.customers = data.records
+        const customers = [...data.records]
+        console.log(customers)
+        customers.forEach(customer => {
+          const newCustomer = customer
+          newCustomer.roleIds = customer.roleIds.split(',')
+          this.customers.push(newCustomer)
+        })
       })
     }
   }

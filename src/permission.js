@@ -28,16 +28,19 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done() // hack: https://github.com/PanJiaChen/vue-element-admin/pull/2939
     } else {
       // determine whether the user has obtained his permission roles through getInfo
+      // 判断是否有添加过路由
       const hasRouters = store.getters.permission_routes_add_routes && store.getters.permission_routes_add_routes.length > 0
       if (hasRouters) {
         next()
       } else {
         try {
           const userId = store.getters.customerInfo.id
+          // 如果store中没有用户信息需要在查询一次
           if (!userId) {
             await store.dispatch('user/reloadUserInfo')
           }
           // generate accessible routes map based on roles
+          // 筛选角色路由
           const accessRoutes = await store.dispatch('permission/generateRoutes', { rolesIds: store.getters.rolesIds, roles: store.getters.roles })
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)

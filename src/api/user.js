@@ -55,3 +55,14 @@ export function addCustomer(data) {
     data
   })
 }
+
+export function deleteCustomer(userId) {
+  return request({
+    headers: {
+      'Authorization': getToken()
+    },
+    url: '/whale-user/sysCustomer/deleteUser',
+    method: 'get',
+    params: { userId: userId }
+  })
+}

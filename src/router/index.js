@@ -84,42 +84,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/userManager',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/userManager/index'),
-        name: 'userManager',
-        meta: { title: '用户管理', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/permissions',
-    component: Layout,
-    redirect: '/permissions/role/index',
-    meta: {
-      title: '权限管理',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/permissions/role/index'),
-        name: 'Guide',
-        meta: { title: '角色管理', noCache: true }
-      },
-      {
-        path: 'index',
-        component: () => import('@/views/permissions/permission/index'),
-        name: 'Guide',
-        meta: { title: '权限管理', noCache: true }
-      }
-    ]
-  },
-  {
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
@@ -181,7 +145,43 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-
+  {
+    path: '/userManager',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/userManager/index'),
+        name: 'userManager',
+        meta: { title: '用户管理', icon: 'documentation', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/permissions',
+    component: Layout,
+    name: 'permissions',
+    redirect: '/permissions/role/index',
+    meta: {
+      title: '权限管理',
+      icon: 'lock'
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'role/index',
+        component: () => import('@/views/permissions/role/index'),
+        name: 'role',
+        meta: { title: '角色管理', noCache: true }
+      },
+      {
+        path: 'permission/index',
+        component: () => import('@/views/permissions/permission/index'),
+        name: 'permission',
+        meta: { title: '菜单管理', noCache: true }
+      }
+    ]
+  },
   {
     path: '/icon',
     component: Layout,
