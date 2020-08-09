@@ -183,6 +183,31 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/pay',
+    component: Layout,
+    name: 'pay',
+    redirect: '/pay/aliPay/index',
+    meta: {
+      title: '支付管理',
+      icon: 'lock'
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'aliPay/index',
+        component: () => import('@/views/pay/AliPay/index'),
+        name: 'aliPay',
+        meta: { title: '支付宝支付测试', noCache: true }
+      },
+      {
+        path: 'pagePay/index',
+        component: () => import('@/views/pay/pagePay/index'),
+        name: 'pagePay',
+        meta: { title: '微信支付测试', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/icon',
     component: Layout,
     children: [
@@ -337,7 +362,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
   {
     path: '/pdf',
     component: Layout,
