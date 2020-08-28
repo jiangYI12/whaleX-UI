@@ -208,6 +208,25 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/ops',
+    component: Layout,
+    name: 'ops',
+    redirect: '/ops/sentinel/index',
+    meta: {
+      title: '运维工具',
+      icon: 'dashboard'
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'sentinel/index',
+        component: () => import('@/views/ops/sentinel'),
+        name: 'sentinel',
+        meta: { title: 'sentinel限流', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/icon',
     component: Layout,
     children: [
