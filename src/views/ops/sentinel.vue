@@ -1,6 +1,6 @@
 <template>
   <div class="contentClass">
-    <iframe src="http://localhost:8088/#/loginhttp://localhost:8088/#/login" scrolling="no" class="sentinelClass" frameborder="0" />
+    <iframe src="http://localhost:10088/#/login" class="sentinelClass" frameborder="0" />
   </div>
 </template>
 

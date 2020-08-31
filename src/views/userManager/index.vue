@@ -2,6 +2,7 @@
   <div class="app-container">
     <div style="padding: 5px">
       <el-button type="primary" @click="addCustomerDialogVisible=true">添加新用户</el-button>
+      <el-button type="primary" @click="refersh">刷新</el-button>
     </div>
     <div>
       <el-table
@@ -147,6 +148,9 @@ export default {
     this.getRolesList()
   },
   methods: {
+    refersh() {
+      this.getUserPage()
+    },
     addCustomer() {
       this.addRoles.forEach(roleId => {
         this.customer.roles.push({ id: roleId })
@@ -171,7 +175,7 @@ export default {
         const { total, size, current } = data
         this.page = { total: total, pageSize: size, pageNo: current }
         const customers = [...data.records]
-        console.log(customers)
+        this.customers = []
         customers.forEach(customer => {
           const newCustomer = customer
           newCustomer.roleIds = customer.roleIds.split(',')
