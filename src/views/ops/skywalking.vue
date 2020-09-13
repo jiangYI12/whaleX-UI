@@ -1,12 +1,12 @@
 <template>
   <div class="contentClass">
-    <iframe src="http://whalex-sentinel:10088/#/login" class="sentinelClass" frameborder="0" />
+    <iframe src="http://whalex-skywalking:10100" class="skywalkingClass" frameborder="0" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Sentinel'
+  name: 'Skywalking'
 }
 </script>
 
@@ -17,7 +17,7 @@ export default {
     position: absolute;
   }
 
-  .sentinelClass{
+  .skywalkingClass{
     position: relative;
     width: 100%;
     overflow: hidden;

@@ -223,6 +223,12 @@ export const asyncRoutes = [
         component: () => import('@/views/ops/sentinel'),
         name: 'sentinel',
         meta: { title: 'sentinel限流', noCache: true }
+      },
+      {
+        path: 'skywalking/index',
+        component: () => import('@/views/ops/skywalking'),
+        name: 'skywalking',
+        meta: { title: 'skywalking链路追踪', noCache: true }
       }
     ]
   },
