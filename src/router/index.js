@@ -229,6 +229,12 @@ export const asyncRoutes = [
         component: () => import('@/views/ops/skywalking'),
         name: 'skywalking',
         meta: { title: 'skywalking链路追踪', noCache: true }
+      },
+      {
+        path: 'kibana/index',
+        component: () => import('@/views/ops/kibana'),
+        name: 'kibana',
+        meta: { title: 'kibana', noCache: true }
       }
     ]
   },
